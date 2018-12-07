@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>8c1a6683-3163-45b7-9bef-d5c6cb88242e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -16,7 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Salud.Framework.Broker\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
     <ProjectReference Include="..\Servinte.Framework.Clinic.BasicInformation.Infraestructure\Servinte.Framework.Clinic.BasicInformation.Infraestructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ExternalConsulting.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

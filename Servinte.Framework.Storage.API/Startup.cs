@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Salud.Framework.Broker.Core;
-using Servinte.Framework.Clinic.BasicInformation.Infraestructure;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Salud.Framework.CosmosDB.Core;
 
-namespace Servinte.Framework.Clinic.BasicInformation.API
+namespace Servinte.Framework.Storage.API
 {
     public class Startup
     {
@@ -21,17 +25,10 @@ namespace Servinte.Framework.Clinic.BasicInformation.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<ExternalConsultingContext>(x => x.UseSqlite(Configuration.GetConnectionString("Default")
-                , b => b.MigrationsAssembly("Servinte.Framework.Clinic.BasicInformation.API")));
-            //services.AddSingleton<IBrokerClient>(new RabbitMQBrokerClient());
-            services.AddSingleton<IBrokerClient>(new
-                    RabbitMQBrokerClient(Configuration.GetSection("BrokerConnection:ip").Value,
-                                         Configuration.GetSection("BrokerConnection:authorization:username").Value,
-                                         Configuration.GetSection("BrokerConnection:authorization:password").Value)
-                                         );
+            services.AddSingleton<IStoragePersistent, StoragePersistentCosmosDB>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,11 +38,6 @@ namespace Servinte.Framework.Clinic.BasicInformation.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
-
 
             // app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

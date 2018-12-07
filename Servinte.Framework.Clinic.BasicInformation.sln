@@ -7,6 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Servinte.Framework.Clinic.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Servinte.Framework.Clinic.BasicInformation.Infraestructure", "Servinte.Framework.Clinic.BasicInformation.Infraestructure\Servinte.Framework.Clinic.BasicInformation.Infraestructure.csproj", "{6BCF3A0E-690E-4188-95E4-126D6D6D2814}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Salud.Framework.Broker.Core", "..\Salud.Framework.Broker\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj", "{8B858247-A0C5-4037-B524-65109F0ABC88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Salud.Framework.CosmosDB.Core", "Salud.Framework.CosmosDB.Core\Salud.Framework.CosmosDB.Core.csproj", "{C5996BA7-67ED-4B6B-B863-DE3C54C8E3EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Salud.Presentation.ConsoleApp", "Salud.Presentation.ConsoleApp\Salud.Presentation.ConsoleApp.csproj", "{9E414CFF-4F64-406F-955C-1F68116B690F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Servinte.Framework.Storage.API", "Servinte.Framework.Storage.API\Servinte.Framework.Storage.API.csproj", "{1FE63DD7-253D-4B9F-8D09-20152702C196}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,22 @@ Global
 		{6BCF3A0E-690E-4188-95E4-126D6D6D2814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BCF3A0E-690E-4188-95E4-126D6D6D2814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BCF3A0E-690E-4188-95E4-126D6D6D2814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B858247-A0C5-4037-B524-65109F0ABC88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B858247-A0C5-4037-B524-65109F0ABC88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B858247-A0C5-4037-B524-65109F0ABC88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B858247-A0C5-4037-B524-65109F0ABC88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5996BA7-67ED-4B6B-B863-DE3C54C8E3EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5996BA7-67ED-4B6B-B863-DE3C54C8E3EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5996BA7-67ED-4B6B-B863-DE3C54C8E3EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5996BA7-67ED-4B6B-B863-DE3C54C8E3EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E414CFF-4F64-406F-955C-1F68116B690F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E414CFF-4F64-406F-955C-1F68116B690F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E414CFF-4F64-406F-955C-1F68116B690F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E414CFF-4F64-406F-955C-1F68116B690F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE63DD7-253D-4B9F-8D09-20152702C196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE63DD7-253D-4B9F-8D09-20152702C196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE63DD7-253D-4B9F-8D09-20152702C196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE63DD7-253D-4B9F-8D09-20152702C196}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,6 +13,8 @@ namespace Servinte.Framework.Clinic.BasicInformation.Infraestructure
         }
 
         public DbSet<Patient> Patients { get; set; }
+
+        public DbSet<ConfigurationPublisher> ConfigurationPublishers { get; set; }
     }
 
 }

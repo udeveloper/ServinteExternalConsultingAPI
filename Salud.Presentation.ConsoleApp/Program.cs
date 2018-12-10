@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Salud.Framework.Broker.Core;
+using Salud.Framework.Broker.Core.ConfigurationModel;
 using Salud.Framework.CosmosDB.Core;
 
 namespace Salud.Presentation.ConsoleApp
@@ -12,6 +15,7 @@ namespace Salud.Presentation.ConsoleApp
             try
             {
                 Program p = new Program();
+                p.GetStartedBroker().Wait();
                 p.GetStartedDemo().Wait();
             }           
             catch (Exception e)
@@ -38,6 +42,38 @@ namespace Salud.Presentation.ConsoleApp
             //await storagePersistentCosmosDB.CreateDocumentEntity("ExternalConsulting", "RecordPatientCollection",document);
 
             await storagePersistentCosmosDB.QueryDocumentEntity("ExternalConsulting", "RecordPatientCollection", "");
+        }
+
+        private async Task GetStartedBroker()
+        {
+            IBrokerClient rabbitMQBrokerClient = new RabbitMQBrokerClient("137.135.105.219", "developerAdmin","developerAdmin");
+
+            ConfigurationPublisherClient publisher = new ConfigurationPublisherClient
+            {
+                Applicacion = "ExternalConsulting",
+                Module = "Diagnostic",
+                Action = "Update",
+                DocumentName = "indexation"
+
+            };
+
+            string json =await System.IO.File.ReadAllTextAsync(@"C:\Users\developerAdmin\Downloads\899999017-5415848-0004-005_data.json");
+
+            
+            for(int i=0; i<1000;i++)
+            {
+                try
+                {
+                    bool send = rabbitMQBrokerClient.SendMessage<object>(JsonConvert.DeserializeObject(json), publisher);
+                    Console.WriteLine(i.ToString() );
+                }
+                catch { }
+                              
+            }
+
+            Console.WriteLine(DateTime.Now);
+            Console.Read();
+           
         }
     }
 }

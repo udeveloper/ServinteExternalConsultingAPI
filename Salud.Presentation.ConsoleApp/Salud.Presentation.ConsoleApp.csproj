@@ -6,7 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Salud.Framework.Broker\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
     <ProjectReference Include="..\Salud.Framework.CosmosDB.Core\Salud.Framework.CosmosDB.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ExternalConsulting.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

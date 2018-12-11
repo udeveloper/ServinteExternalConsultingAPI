@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Salud.Framework.Broker\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
+    <ProjectReference Include="..\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
     <ProjectReference Include="..\Salud.Framework.CosmosDB.Core\Salud.Framework.CosmosDB.Core.csproj" />
   </ItemGroup>
 

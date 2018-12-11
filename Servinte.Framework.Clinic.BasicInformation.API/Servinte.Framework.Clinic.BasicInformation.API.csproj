@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Salud.Framework.Broker\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
+    <ProjectReference Include="..\Salud.Framework.Broker.Core\Salud.Framework.Broker.Core.csproj" />
     <ProjectReference Include="..\Servinte.Framework.Clinic.BasicInformation.Infraestructure\Servinte.Framework.Clinic.BasicInformation.Infraestructure.csproj" />
   </ItemGroup>
 

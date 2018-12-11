@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="Servinte.Workers" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="ExternalConsultingWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="d5a9f380-1ac7-4273-bc3e-1625b2343fdf" />
+      <Setting name="monitoringBrokerExchangeName" value="exchange_transactions_externalConsulting" />
+      <Setting name="monitoringBrokerQueueName" value="queue_servinte_externalConsulting_transactions_all" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

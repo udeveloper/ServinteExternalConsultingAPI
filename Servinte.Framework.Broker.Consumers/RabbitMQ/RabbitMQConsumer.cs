@@ -8,14 +8,21 @@ using System.Net.Http;
 using System.Dynamic;
 using System.Collections.Generic;
 using IConnection = RabbitMQ.Client.IConnection;
+using System.Threading.Tasks;
 
 namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 {
     public class RabbitMQConsumer
     {
+        //Consumer
         private static ConnectionFactory _factory;
         private static IConnection _connection;
         private static HttpClient _httpClient;
+
+        //Publisher
+        private static ConnectionFactory _factoryClient;
+        private static IConnection _connectionClient;
+        private static IModel _channelClient;
         //private static IBrokerClient rabbitMQBrokerClient;
 
         private  string ExchangeName = "exchange_transactions_externalConsulting";
@@ -41,11 +48,24 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                 BaseAddress = new Uri("http://servinteframeworkstorageapi.azurewebsites.net")
             };
 
+            _factoryClient = new ConnectionFactory()
+            {
+                HostName = _factory.HostName,
+                UserName = _factory.UserName,
+                Password = _factory.Password
+            };
+
+            _connectionClient = _factoryClient.CreateConnection();
+            _channelClient = _connectionClient.CreateModel();
+
         }
 
         public void Close()
         {
-            _connection.Close();
+            if(_connection.IsOpen)
+                 _connection.Close();
+            if (_connectionClient.IsOpen)
+                _connectionClient.Close();
         }
 
         public async void ProcessMessages()
@@ -59,66 +79,67 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                     Console.WriteLine();
 
                     channel.ExchangeDeclare(ExchangeName, "topic");
-                    channel.QueueDeclare(MonitoringQueueName, 
-                        true, false, false, null);
-
+                    channel.QueueDeclare(MonitoringQueueName, true, false, false, null);
                     channel.QueueBind(MonitoringQueueName, ExchangeName, "");
-                    channel.QueueBind("queue_servinte_externalConsulting_transactions_responses", ExchangeName, "servinte.externalConsulting.responses");
 
-                    
+                                      
                     channel.BasicQos(0, 2, false);
-                    Subscription subscription = new Subscription(channel, 
-                        MonitoringQueueName, false);
-                    
-                    while (true)
-                    {
-                        BasicDeliverEventArgs deliveryArguments = subscription.Next();
 
+                    var consumer = new EventingBasicConsumer(channel);
+
+                    channel.BasicConsume(MonitoringQueueName, false, consumer);
+
+                    consumer.Received += (model, ea) =>
+                    {
                         object message = null;
 
-                        if (deliveryArguments != null)
-                            message = JsonConvert.DeserializeObject(deliveryArguments.Body.DeSerializeText());
-                        else
-                            continue;
-                        //var message = (Patient)deliveryArguments.Body.DeSerialize(typeof(Patient));                       
-
-                        var routingKey = deliveryArguments.RoutingKey;
+                        if (ea != null)
+                            message = JsonConvert.DeserializeObject(ea.Body.DeSerializeText());
+                                              
+                        var routingKey = ea.RoutingKey;
 
 
                         //Adicionar Logica Personalidada por cada Clave de Routing y entidad.
-
                         //var response = await _httpClient.PostAsJsonAsync("/api/storagepersistent",CustomLogic(message));  
 
-                        bool responseSuccess=false;
+                        bool responseSuccess = false;
 
                         try
                         {
+                           
 
-
-                            var response = await _httpClient.PostAsJsonAsync("api/storagepersistent", CustomLogic(message,deliveryArguments));
-
-                            if (response.IsSuccessStatusCode)
+                            if (ea.RoutingKey != "servinte.externalConsulting.responses")
                             {
-
-                                channel.BasicPublish(ExchangeName, "servinte.externalConsulting.responses", null,( "Mensaje FInalizado  " + deliveryArguments.DeliveryTag).Serialize());
-
-                                subscription.Ack(deliveryArguments);
+                                 _httpClient.PostAsJsonAsync("api/storagepersistent", CustomLogic(message, ea)).Wait();                               
                             }
 
-                            responseSuccess = response.IsSuccessStatusCode;
-                          
+                            responseSuccess = true;
+
                         }
-                        catch(Exception ex)  {
-                             
+                        catch (Exception ex)
+                        {
+
+                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, ea.DeliveryTag, ex.Message);
                         }
                         finally
                         {
-                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, responseSuccess);
+
+                            if(responseSuccess)
+                            {
+                                channel.BasicPublish(exchange: ExchangeName, routingKey: "servinte.responses.externalConsulting",
+                                 basicProperties: null, body:  message.Serialize());
+                                channel.BasicAck(ea.DeliveryTag, false);
+                            }
+
+                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, ea.DeliveryTag, responseSuccess);
                         }
 
-                                                                  
 
-                    }
+                    };
+
+                    Console.WriteLine(" Press [enter] to exit.");
+                    Console.ReadLine();
+
                 }
             }
         }

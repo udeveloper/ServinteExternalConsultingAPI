@@ -92,6 +92,8 @@ namespace Servinte.Framework.NotificationEvents.Core
 
                             await connection.InvokeAsync("SendMessage","Usuario Sistema : Proceso # " + new Guid().ToString() + "Finalizo", message);
 
+                            responseSuccess = true;
+
                             subscription.Ack(deliveryArguments);
                           
 

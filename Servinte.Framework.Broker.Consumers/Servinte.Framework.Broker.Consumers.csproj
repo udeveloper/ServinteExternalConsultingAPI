@@ -43,9 +43,6 @@
     <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <HintPath>..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Salud.Framework.Broker.Core">
-      <HintPath>..\..\Angular\Angular Servinte\Salud.Framework.Broker\Salud.Framework.Broker.Core\bin\Debug\netstandard2.0\Salud.Framework.Broker.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

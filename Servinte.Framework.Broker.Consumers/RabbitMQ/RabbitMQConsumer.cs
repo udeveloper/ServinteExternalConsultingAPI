@@ -8,8 +8,6 @@ using System.Net.Http;
 using System.Dynamic;
 using System.Collections.Generic;
 using IConnection = RabbitMQ.Client.IConnection;
-using Salud.Framework.Broker.Core.ConfigurationModel;
-using Salud.Framework.Broker.Core;
 
 namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 {
@@ -18,7 +16,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         private static ConnectionFactory _factory;
         private static IConnection _connection;
         private static HttpClient _httpClient;
-        private static IBrokerClient rabbitMQBrokerClient;
+        //private static IBrokerClient rabbitMQBrokerClient;
 
         private  string ExchangeName = "exchange_transactions_externalConsulting";
         private  string MonitoringQueueName = "queue_servinte_externalConsulting_transactions_all";        
@@ -33,7 +31,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         {
             _factory = new ConnectionFactory
             {
-                HostName = "137.135.105.219",
+                HostName = "40.121.32.117",
                 UserName = "developerAdmin",
                 Password = "developerAdmin"
             };
@@ -64,9 +62,10 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                     channel.QueueDeclare(MonitoringQueueName, 
                         true, false, false, null);
 
-                    channel.QueueBind(MonitoringQueueName, ExchangeName, "");                    
-                    
+                    channel.QueueBind(MonitoringQueueName, ExchangeName, "");
+                    channel.QueueBind("queue_servinte_externalConsulting_transactions_responses", ExchangeName, "servinte.externalConsulting.responses");
 
+                    
                     channel.BasicQos(0, 2, false);
                     Subscription subscription = new Subscription(channel, 
                         MonitoringQueueName, false);
@@ -100,18 +99,10 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 
                             if (response.IsSuccessStatusCode)
                             {
+
+                                channel.BasicPublish(ExchangeName, "servinte.externalConsulting.responses", null,( "Mensaje FInalizado  " + deliveryArguments.DeliveryTag).Serialize());
+
                                 subscription.Ack(deliveryArguments);
-
-                                ConfigurationPublisherClient publisher = new ConfigurationPublisherClient
-                                {
-                                    Applicacion = "ExternalConsulting",
-                                    Module = "Basic_information",
-                                    Action = "Add",
-                                    DocumentName = "Patient"
-
-                                };
-                                rabbitMQBrokerClient.SendMessage<string>("Mensaje PUblicado " + deliveryArguments.DeliveryTag, publisher);
-
                             }
 
                             responseSuccess = response.IsSuccessStatusCode;

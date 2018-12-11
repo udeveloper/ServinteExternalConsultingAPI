@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Salud.Framework.Broker.Core;
 using Salud.Framework.Broker.Core.ConfigurationModel;
 using Salud.Framework.CosmosDB.Core;
+using Servinte.Framework.NotificationEvents.Core;
 
 namespace Salud.Presentation.ConsoleApp
 {
@@ -14,7 +15,9 @@ namespace Salud.Presentation.ConsoleApp
             // ADD THIS PART TO YOUR CODE
             try
             {
+                
                 Program p = new Program();
+                p.GetStartedSignalR();
                 p.GetStartedBroker().Wait();
                 p.GetStartedDemo().Wait();
             }           
@@ -42,6 +45,13 @@ namespace Salud.Presentation.ConsoleApp
             //await storagePersistentCosmosDB.CreateDocumentEntity("ExternalConsulting", "RecordPatientCollection",document);
 
             await storagePersistentCosmosDB.QueryDocumentEntity("ExternalConsulting", "RecordPatientCollection", "");
+        }
+
+        private void GetStartedSignalR()
+        {
+            RabbitMQConsumerResponses client = new RabbitMQConsumerResponses();
+            client.CreateConnection();
+            client.ProcessMessages();
         }
 
         private async Task GetStartedBroker()

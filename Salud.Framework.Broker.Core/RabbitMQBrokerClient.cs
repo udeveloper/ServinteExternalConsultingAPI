@@ -96,7 +96,6 @@ namespace Salud.Framework.Broker.Core
                                   && c.Module == configurationPublisher.Module && c.Action == configurationPublisher.Action);
 
             var properties = _channel.CreateBasicProperties();
-            properties.Persistent=true;
             properties.Headers = (configurationPublisher.PropertiesCustom ?? new Dictionary<string, object>());            
             properties.Headers.Add("application", configurationPublisher.Applicacion);
             properties.Headers.Add("module", configurationPublisher.Module);

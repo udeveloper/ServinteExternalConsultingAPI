@@ -6,7 +6,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="d5a9f380-1ac7-4273-bc3e-1625b2343fdf" />
       <Setting name="monitoringBrokerExchangeName" value="exchange_transactions_externalConsulting" />
-      <Setting name="monitoringBrokerQueueName" value="queue_servinte_externalConsulting_transactions_audit" />
+      <Setting name="monitoringBrokerQueueName" value="queue_servinte_externalConsulting_transactions_add" />
       <Setting name="monitoringKeysRouting" value="servinte.externalConsulting.#"/>
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="developerAdmin" />

@@ -6,8 +6,8 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=externalconsultingworker;AccountKey=$(_externalconsultingworker.key_)" />
       <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="d5a9f380-1ac7-4273-bc3e-1625b2343fdf" />
       <Setting name="monitoringBrokerExchangeName" value="exchange_transactions_externalConsulting" />
-      <Setting name="monitoringBrokerQueueName" value="queue_servinte_externalConsulting_transactions_all" />
-      <Setting name="monitoringKeysRouting" value="servinte.externalConsulting.*.delete" />      
+      <Setting name="monitoringBrokerQueueName" value="queue_servinte_externalConsulting_transactions_add" />
+      <Setting name="monitoringKeysRouting" value="servinte.externalConsulting.#" />      
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="developerAdmin" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEFQ+t+f4OeG2Rlu7N+IdbE0wDQYJKoZIhvcNAQEBBQAEggEAHc/YGVdAwjqQk1Lqv/vO1WOex8X2xNoKnORfMMAMiuu0FgybmzzyPt0WhdbTRvkrN2McQVIdmniUFJVuCG1Fl1PCVr5KHOTwq4vRa+lk4QBPVPZJGvsXSsBe01bvSLlpdO+fmOLZfXYi0qkYdq4ThAFc4CpVBgU6AOnhKdewEge5LxFbxIY3iYQTS5WqFsRgcTXLWm8Tc3tjYKiCS3ERAOjz+Nt59/Uc49dVNM3DC3uIOBIfEwUC+Tf6oixUjPj3KzXu8l8LoiP3qj9X7bKGvKmotCqcE4RyPVsY3AMJJpb/lq7wxyy/8QJVEirZOTTO5l/6f4TK0ccbrOsXudQwnDAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECFnI/nSphQXTgBB2pil1DZJ1xCeofcBqZQuS" />

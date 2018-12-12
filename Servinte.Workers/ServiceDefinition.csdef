@@ -6,6 +6,11 @@
       <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" />
       <Setting name="monitoringBrokerExchangeName" />
       <Setting name="monitoringBrokerQueueName" />
+      <Setting name="monitoringKeysRouting" />
     </ConfigurationSettings>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
   </WorkerRole>
 </ServiceDefinition>

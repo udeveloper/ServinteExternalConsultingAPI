@@ -8,6 +8,6 @@ namespace Salud.Framework.Broker.Core
     public interface IBrokerClient
     {
 
-        bool SendMessage<T>(T message, ConfigurationPublisherClient configurationPublisher);
+        bool SendMessage<T,V>(T message, V configurationMessage,ConfigurationPublisherClient configurationPublisher);
     }
 }

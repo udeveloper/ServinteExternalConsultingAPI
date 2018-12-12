@@ -23,12 +23,14 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         //private static IBrokerClient rabbitMQBrokerClient;
 
         private  string ExchangeName = "exchange_transactions_externalConsulting";
-        private  string MonitoringQueueName = "queue_servinte_externalConsulting_transactions_all";        
+        private  string MonitoringQueueName = "queue_servinte_externalConsulting_transactions_audit";
+        private  string[] keysRouting =new string[] { "servinte.externalConsulting.#" };
 
-        public RabbitMQConsumer(string exchangeName,string monitoringQueueName)
+        public RabbitMQConsumer(string exchangeName, string monitoringQueueName, string[] keysRouting)
         {
             this.ExchangeName = exchangeName;
             this.MonitoringQueueName = monitoringQueueName;
+            this.keysRouting = keysRouting;
         }
 
         public void CreateConnection()
@@ -67,23 +69,27 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 
                     channel.ExchangeDeclare(ExchangeName, "topic");
                     channel.QueueDeclare(MonitoringQueueName, true, false, false, null);
-                    channel.QueueBind(MonitoringQueueName, ExchangeName, "");                    
+
+                    foreach(var key in this.keysRouting)
+                         channel.QueueBind(MonitoringQueueName, ExchangeName, key);                    
 
 
                     channel.BasicQos(0, 2, false);
+                    
+                    Subscription subscription = new Subscription(channel,
+                     MonitoringQueueName, false);
 
-                    var consumer = new EventingBasicConsumer(channel);
-
-                    channel.BasicConsume(MonitoringQueueName, false, consumer);
-
-                    consumer.Received += (model, ea) =>
+                    while (true)
                     {
+
+                        BasicDeliverEventArgs deliveryArguments = subscription.Next();
+
                         object message = null;
 
-                        if (ea != null)
-                            message = JsonConvert.DeserializeObject(ea.Body.DeSerializeText());
-                                              
-                        var routingKey = ea.RoutingKey;
+                        if (deliveryArguments != null)
+                            message = JsonConvert.DeserializeObject(deliveryArguments.Body.DeSerializeText());
+
+                        var routingKey = deliveryArguments.RoutingKey;
 
 
                         //Adicionar Logica Personalidada por cada Clave de Routing y entidad.
@@ -93,11 +99,11 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 
                         try
                         {
-                           
 
-                            if (ea.RoutingKey != "servinte.externalConsulting.responses")
+
+                            if (deliveryArguments.RoutingKey != "servinte.externalConsulting.responses")
                             {
-                                 _httpClient.PostAsJsonAsync("api/storagepersistent", CustomLogic(message, ea)).Wait();                               
+                                _httpClient.PostAsJsonAsync("api/storagepersistent", CustomLogic(message, deliveryArguments)).Wait();
                             }
 
                             responseSuccess = true;
@@ -106,27 +112,34 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                         catch (Exception ex)
                         {
 
-                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, ea.DeliveryTag, ex.Message);
+                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, ex.Message);
                         }
                         finally
                         {
 
-                            if(responseSuccess)
+                            if (responseSuccess)
                             {
                                 channel.BasicPublish(exchange: ExchangeName, routingKey: "servinte.responses.externalConsulting",
-                                 basicProperties: null, body:  message.Serialize());
-                                channel.BasicAck(ea.DeliveryTag, false);
+                                 basicProperties: null, body: message.Serialize());
+                                channel.BasicAck(deliveryArguments.DeliveryTag, false);
                             }
 
-                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, ea.DeliveryTag, responseSuccess);
+                            Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, responseSuccess);
                         }
 
 
-                    };
+                    }
 
+                    //consumer.Received += (model, ea) =>
+                    //{
+                      
 
-                    Console.WriteLine("");
-                    Console.Read();
+                        
+                    //};
+
+                    
+
+                    
                 }
             }
         }

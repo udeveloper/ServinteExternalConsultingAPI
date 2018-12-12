@@ -107,7 +107,7 @@ namespace Servinte.Framework.Clinic.BasicInformation.API.Controllers
                 DocumentName="Patient"
 
             };
-            this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
+            this.rabbitMQBrokerClient.SendMessage<Patient,object>(patient,null ,publisher);
 
             return Ok(patient);
         }

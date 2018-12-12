@@ -27,8 +27,9 @@ namespace ExternalConsultingWorker
             try
             {
 
-                this.client.ProcessMessages();
-                //this.RunAsync(this.cancellationTokenSource.Token).Wait();
+                client.ProcessMessages();
+
+               // this.RunAsync(this.cancellationTokenSource.Token).Wait();
             }
             finally
             {
@@ -48,7 +49,7 @@ namespace ExternalConsultingWorker
 
             
             client = new RabbitMQConsumer(CloudConfigurationManager.GetSetting("monitoringBrokerExchangeName"),
-                    CloudConfigurationManager.GetSetting("monitoringBrokerQueueName"));
+                    CloudConfigurationManager.GetSetting("monitoringBrokerQueueName"),new string[] { CloudConfigurationManager.GetSetting("monitoringKeysRouting") });
 
             client.CreateConnection();
 
@@ -74,11 +75,12 @@ namespace ExternalConsultingWorker
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace the following with your own logic.
+          
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working");
-                client.ProcessMessages();
-               
+                              
             }
         }
     }

@@ -89,7 +89,7 @@ namespace Salud.Framework.Broker.Core
                                routingKey: configurationPublisher.KeyBinding);
         }
 
-        public bool SendMessage<T>(T message, ConfigurationPublisherClient configurationPublisher)
+        public bool SendMessage<T,V>(T message, V configurationMessage, ConfigurationPublisherClient configurationPublisher)
         {
 
             var publisher = _configurationPublishers.SingleOrDefault(c => c.Applicacion == configurationPublisher.Applicacion
@@ -97,12 +97,15 @@ namespace Salud.Framework.Broker.Core
 
             var properties = _channel.CreateBasicProperties();
             properties.Persistent=true;
-            properties.Headers = (configurationPublisher.PropertiesCustom ==null ?  new Dictionary<string, object>() : configurationPublisher.PropertiesCustom );            
+            properties.Headers = (configurationPublisher.PropertiesCustom ?? new Dictionary<string, object>());            
             properties.Headers.Add("application", configurationPublisher.Applicacion);
             properties.Headers.Add("module", configurationPublisher.Module);
             properties.Headers.Add("documentName", configurationPublisher.DocumentName);
             properties.Headers.Add("callbackResponse", true);
-            
+
+            if (configurationMessage != null)
+                properties.Headers.Add("configuration", configurationMessage);
+
 
             _channel.BasicPublish(exchange: publisher.ExchageName,
                                   routingKey: publisher.KeyRouting,

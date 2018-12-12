@@ -44,9 +44,6 @@
     <DiagnosticsConfiguration Include="ExternalConsultingWorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\ExternalConsultingWorkerProduction.azurePubxml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ExternalConsultingWorker\ExternalConsultingWorker.csproj">
       <Name>ExternalConsultingWorker</Name>
       <Project>{6d16dc4a-3c7d-41e8-add5-2553ccc61387}</Project>
@@ -54,6 +51,9 @@
       <RoleType>Worker</RoleType>
       <RoleName>ExternalConsultingWorker</RoleName>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\externalconsultingworkerProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

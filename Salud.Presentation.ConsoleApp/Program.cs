@@ -17,8 +17,8 @@ namespace Salud.Presentation.ConsoleApp
             {
                 
                 Program p = new Program();
-                p.GetStartedSignalR();
-               // p.GetStartedBroker().Wait();
+                //p.GetStartedSignalR();
+               p.GetStartedBroker().Wait();
                 //p.GetStartedDemo().Wait();
             }           
             catch (Exception e)
@@ -75,7 +75,7 @@ namespace Salud.Presentation.ConsoleApp
             {
                 try
                 {
-                    bool send = rabbitMQBrokerClient.SendMessage<object>(JsonConvert.DeserializeObject(json), publisher);
+                    bool send = rabbitMQBrokerClient.SendMessage<object,object>(JsonConvert.DeserializeObject(json),null, publisher);
                     Console.WriteLine(i.ToString() );
                 }
                 catch { }

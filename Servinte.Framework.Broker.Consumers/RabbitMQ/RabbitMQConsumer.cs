@@ -67,9 +67,9 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 
                     channel.ExchangeDeclare(ExchangeName, "topic");
                     channel.QueueDeclare(MonitoringQueueName, true, false, false, null);
-                    channel.QueueBind(MonitoringQueueName, ExchangeName, "servinte.externalConsulting.*.all");
+                    channel.QueueBind(MonitoringQueueName, ExchangeName, "");                    
 
-                                      
+
                     channel.BasicQos(0, 2, false);
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -122,8 +122,11 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                         }
 
 
-                    };                                       
+                    };
 
+
+                    Console.WriteLine("");
+                    Console.Read();
                 }
             }
         }

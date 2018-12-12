@@ -17,9 +17,9 @@ namespace Salud.Presentation.ConsoleApp
             {
                 
                 Program p = new Program();
-                //p.GetStartedSignalR();
-                p.GetStartedBroker().Wait();
-                p.GetStartedDemo().Wait();
+                p.GetStartedSignalR();
+               // p.GetStartedBroker().Wait();
+                //p.GetStartedDemo().Wait();
             }           
             catch (Exception e)
             {

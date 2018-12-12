@@ -90,7 +90,7 @@ namespace Servinte.Framework.NotificationEvents.Core
                         {
 
 
-                            await connection.InvokeAsync("SendMessage","Usuario Sistema : Proceso # Finalizo", message.ToString());
+                            await connection.InvokeAsync("SendMessage","Usuario Sistema : Proceso # Finalizo", Guid.NewGuid().ToString());
 
                             responseSuccess = true;
 

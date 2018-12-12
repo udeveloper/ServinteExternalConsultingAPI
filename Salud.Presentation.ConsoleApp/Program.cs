@@ -17,7 +17,7 @@ namespace Salud.Presentation.ConsoleApp
             {
                 
                 Program p = new Program();
-                p.GetStartedSignalR();
+                //p.GetStartedSignalR();
                 p.GetStartedBroker().Wait();
                 p.GetStartedDemo().Wait();
             }           
@@ -56,7 +56,7 @@ namespace Salud.Presentation.ConsoleApp
 
         private async Task GetStartedBroker()
         {
-            IBrokerClient rabbitMQBrokerClient = new RabbitMQBrokerClient("137.135.105.219", "developerAdmin","developerAdmin");
+            IBrokerClient rabbitMQBrokerClient = new RabbitMQBrokerClient("40.121.32.117", "developerAdmin","developerAdmin");
 
             ConfigurationPublisherClient publisher = new ConfigurationPublisherClient
             {
@@ -67,10 +67,11 @@ namespace Salud.Presentation.ConsoleApp
 
             };
 
-            string json =await System.IO.File.ReadAllTextAsync(@"C:\Users\developerAdmin\Downloads\899999017-5415848-0004-005_data.json");
+           // string json =await System.IO.File.ReadAllTextAsync(@"C:\Users\developerAdmin\Downloads\sincronizacion.txt");
+            string json = await System.IO.File.ReadAllTextAsync(@"C:\Users\developerAdmin\Downloads\899999017-5415848-0004-005_data.json");
 
-            
-            for(int i=0; i<1000;i++)
+
+            for (int i=0; i<1000;i++)
             {
                 try
                 {

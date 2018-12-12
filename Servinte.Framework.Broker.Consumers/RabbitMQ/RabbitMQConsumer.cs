@@ -19,10 +19,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         private static IConnection _connection;
         private static HttpClient _httpClient;
 
-        //Publisher
-        private static ConnectionFactory _factoryClient;
-        private static IConnection _connectionClient;
-        private static IModel _channelClient;
+        
         //private static IBrokerClient rabbitMQBrokerClient;
 
         private  string ExchangeName = "exchange_transactions_externalConsulting";
@@ -48,27 +45,17 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                 BaseAddress = new Uri("http://servinteframeworkstorageapi.azurewebsites.net")
             };
 
-            _factoryClient = new ConnectionFactory()
-            {
-                HostName = _factory.HostName,
-                UserName = _factory.UserName,
-                Password = _factory.Password
-            };
-
-            _connectionClient = _factoryClient.CreateConnection();
-            _channelClient = _connectionClient.CreateModel();
-
+           
         }
 
         public void Close()
         {
             if(_connection.IsOpen)
                  _connection.Close();
-            if (_connectionClient.IsOpen)
-                _connectionClient.Close();
+      
         }
 
-        public async void ProcessMessages()
+        public void ProcessMessages()
         {
             using (_connection = _factory.CreateConnection())
             {
@@ -80,7 +67,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
 
                     channel.ExchangeDeclare(ExchangeName, "topic");
                     channel.QueueDeclare(MonitoringQueueName, true, false, false, null);
-                    channel.QueueBind(MonitoringQueueName, ExchangeName, "");
+                    channel.QueueBind(MonitoringQueueName, ExchangeName, "servinte.externalConsulting.*.all");
 
                                       
                     channel.BasicQos(0, 2, false);
@@ -135,10 +122,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                         }
 
 
-                    };
-
-                    Console.WriteLine(" Press [enter] to exit.");
-                    Console.ReadLine();
+                    };                                       
 
                 }
             }

@@ -3,6 +3,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Net.Http;
 using System.Text;
@@ -36,7 +37,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         {
             _factory = new ConnectionFactory
             {
-                HostName = "40.121.32.117",
+                HostName = "40.114.125.124",
                 UserName = "developerAdmin",
                 Password = "developerAdmin"
             };
@@ -62,9 +63,9 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
         public void ProcessMessages()
         {
 
-            Console.WriteLine("Listening for Topic <{0}>", this.MonitoringQueueName);
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine();
+            Debug.WriteLine("Listening for Topic <{0}>", this.MonitoringQueueName);
+            Debug.WriteLine("-----------------------------------------");
+            
 
             _channel.BasicQos(0, 2, false);
 
@@ -102,7 +103,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
             catch (Exception ex)
             {
 
-                Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, ex.Message);
+                Debug.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, ex.Message);
             }
             finally
             {
@@ -114,7 +115,7 @@ namespace Servinte.Framework.Broker.Consumer.RabbitMQ
                     _channel.BasicAck(deliveryArguments.DeliveryTag, false);
                 }
 
-                Console.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, responseSuccess);
+                Debug.WriteLine("--- Payment - Routing Key <{0}> : {1} - Estado : {2} ", routingKey, deliveryArguments.DeliveryTag, responseSuccess);
             }
 
         }

@@ -18,8 +18,8 @@ namespace Salud.Presentation.ConsoleApp
                 
                 Program p = new Program();
                 //p.GetStartedSignalR();
-               p.GetStartedBroker().Wait();
-                //p.GetStartedDemo().Wait();
+               //p.GetStartedBroker().Wait();
+                p.GetStartedDemo().Wait();
             }           
             catch (Exception e)
             {
@@ -44,7 +44,11 @@ namespace Salud.Presentation.ConsoleApp
             //string document = "{'id':'1','nombre':'ABRAHAN URIEL OLAUA','tipoIdentificacion':'CC','numeroIdentificacion':91533079,'edad':34,'peso':74.0,'masaCorporal':24.8,'superficieCorporal':1.9,'genero':'M','identificador':57977,'talla':174.0,'grupoSanguineo':'O + '}";
             //await storagePersistentCosmosDB.CreateDocumentEntity("ExternalConsulting", "RecordPatientCollection",document);
 
-            await storagePersistentCosmosDB.QueryDocumentEntity("ExternalConsulting", "RecordPatientCollection", "");
+            dynamic documento=  storagePersistentCosmosDB.QueryDocumentEntity("ExternalConsulting", "IndexationCollection", "IndexationCollection.idEpisodio", "397497898");
+
+            string doc = JsonConvert.SerializeObject(documento);
+
+            Console.WriteLine(doc);
         }
 
         private void GetStartedSignalR()

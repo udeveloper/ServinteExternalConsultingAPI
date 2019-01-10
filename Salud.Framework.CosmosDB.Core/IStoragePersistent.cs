@@ -14,7 +14,8 @@ namespace Salud.Framework.CosmosDB.Core
         Task CreateEntity(string databaseName, string entityName);
 
         Task CreateDocumentEntity(string databaseName, string entityName, string document);
+        Task<Boolean>  ReplaceDocumentEntity(string databaseName, string entityName,string document, string idDocument);
 
-        Task QueryDocumentEntity(string databaseName, string entityName, string document);
+        dynamic QueryDocumentEntity(string databaseName, string entityName, string predicate, string idDocument);
     }
 }

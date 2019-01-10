@@ -40,24 +40,26 @@ namespace Salud.Framework.CosmosDB.Core
             await this.client.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(databaseName), new DocumentCollection { Id = entityName });
         }
 
-        public async Task QueryDocumentEntity(string databaseName, string entityName, string document)
+        public async Task<Boolean> ReplaceDocumentEntity(string databaseName, string entityName, string document, string idDocument)
+        {
+            var response = await this.client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(databaseName, entityName,idDocument), JsonConvert.DeserializeObject(document));
+
+            return (response.StatusCode==HttpStatusCode.OK); 
+        }
+
+        public dynamic QueryDocumentEntity(string databaseName, string entityName,string predicate, string idDocument)
         {
             // Set some common query options
-            FeedOptions queryOptions = new FeedOptions { MaxItemCount = -1 };
+            FeedOptions queryOptions = new FeedOptions { MaxItemCount = 1 };
 
             // Now execute the same query via direct SQL
-            var familyQueryInSql = this.client.CreateDocumentQuery(
+            var document = this.client.CreateDocumentQuery(
                     UriFactory.CreateDocumentCollectionUri(databaseName.ToUpper(), entityName),
-                    "SELECT * FROM  RecordPatientCollection WHERE RecordPatientCollection.Nombre='MARCOS OLAYA'",
-                    queryOptions).ToList();
-            
-            Console.WriteLine("Running direct SQL query...");
-            foreach (var family in familyQueryInSql)
-            {
-                Console.WriteLine("\tRead {0}",JsonConvert.SerializeObject(family,Formatting.Indented));
-            }
+                   string.Format("SELECT * FROM {0} where {1} = '{2}'", entityName, predicate, idDocument),
+                    queryOptions).AsEnumerable().FirstOrDefault();
 
-            await Task.CompletedTask;
+            
+            return document;
         }
 
     }

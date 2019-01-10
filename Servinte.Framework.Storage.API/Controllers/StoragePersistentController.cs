@@ -18,13 +18,27 @@ namespace Servinte.Framework.Storage.API.Controllers
             this.storagePersistent = storagePersistent;
         }
 
+        [HttpGet("{entityName}/{idKey}/{idDocument}")]
+        public async Task<dynamic> Get(string entityName, string idKey, string idDocument)
+        {
+            IStoragePersistent storagePersistentCosmosDB = new StoragePersistentCosmosDB();
+            await storagePersistentCosmosDB.Connect();
+
+            var documentStorage = storagePersistentCosmosDB.QueryDocumentEntity("ExternalConsulting", entityName, entityName + "." + idKey, idDocument);
+
+            var document = JsonConvert.SerializeObject(documentStorage);
+
+            return Ok(document);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] dynamic dynamic)
         {
 
             //if(dynamic is String )
             //     dynamic = JsonConvert.DeserializeObject(dynamic);        
-            
+
             var application = dynamic.configuration.application.Value.ToString().ToUpper();
 
             await storagePersistent.Connect();
@@ -36,6 +50,21 @@ namespace Servinte.Framework.Storage.API.Controllers
             await storagePersistent.CreateDocumentEntity(application, dynamic.configuration.entityName.Value, document);
 
             return Ok(dynamic);
+        }
+
+        [HttpPut("{idDocument}")]
+        public async Task<IActionResult> Put(string idDocument,[FromBody] dynamic dynamic)
+        {
+
+            var application = dynamic.configuration.application.Value.ToString().ToUpper();
+
+            await storagePersistent.Connect();
+
+            //var document = JsonConvert.SerializeObject(dynamic[dynamic.configuration.documentName.Value]);
+            var document = JsonConvert.SerializeObject(dynamic);
+            var response = await storagePersistent.ReplaceDocumentEntity(application,dynamic.configuration.entityName.Value, document,idDocument);
+
+            return Ok();
         }
 
         public static bool PropertyExists(dynamic obj, string name)

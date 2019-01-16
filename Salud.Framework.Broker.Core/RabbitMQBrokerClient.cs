@@ -101,6 +101,7 @@ namespace Salud.Framework.Broker.Core
             properties.Headers.Add("module", configurationPublisher.Module);
             properties.Headers.Add("documentName", configurationPublisher.DocumentName);
             properties.Headers.Add("callbackResponse", true);
+            
 
             if (configurationMessage != null)
                 properties.Headers.Add("configuration", configurationMessage);

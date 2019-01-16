@@ -57,7 +57,6 @@ namespace Salud.Framework.CosmosDB.Core
                     UriFactory.CreateDocumentCollectionUri(databaseName.ToUpper(), entityName),
                    string.Format("SELECT * FROM {0} where {1} = '{2}'", entityName, predicate, idDocument),
                     queryOptions).AsEnumerable().FirstOrDefault();
-
             
             return document;
         }

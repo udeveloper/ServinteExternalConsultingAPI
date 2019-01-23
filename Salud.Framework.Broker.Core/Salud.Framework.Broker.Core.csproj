@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Servinte-Framework-Basic-Information-Solution\Servinte.Framework.Clinic.BasicInformation.Infraestructure\Servinte.Framework.Clinic.BasicInformation.Infraestructure.csproj" />
+    <ProjectReference Include="..\Servinte.Framework.Clinic.BasicInformation.Infraestructure\Servinte.Framework.Clinic.BasicInformation.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>

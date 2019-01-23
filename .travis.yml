@@ -5,7 +5,7 @@ sudo: required
 matrix:
   include:
     - dotnet: 2.1.403
-      mono: 4.5.2
+      mono: latest
       env: DOTNETCORE=2  # optional, can be used to take different code paths in your script
 script:
 - dotnet restore -s https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json -s https://api.nuget.org/v3/index.json

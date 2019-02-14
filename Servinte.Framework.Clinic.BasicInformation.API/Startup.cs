@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using Salud.Framework.Broker.Core;
 using Servinte.Framework.Clinic.BasicInformation.Infraestructure;
+using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 
 namespace Servinte.Framework.Clinic.BasicInformation.API
 {
@@ -31,6 +34,12 @@ namespace Servinte.Framework.Clinic.BasicInformation.API
                                          Configuration.GetSection("BrokerConnection:authorization:password").Value)
                                          );
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Servinte Basic Informacion API", Version = "v1" });
+                c.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
+                    "Servinte.Framework.Clinic.BasicInformation.API.xml"));
+            });
             services.AddCors();
         }
 
@@ -49,6 +58,13 @@ namespace Servinte.Framework.Clinic.BasicInformation.API
 
             // app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+                {
+                    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Servinte Basic Informacion API V1");
+                }
+            );
+
             app.UseMvc();
         }
     }

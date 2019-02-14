@@ -5,6 +5,7 @@ using Salud.Framework.Broker.Core;
 using Salud.Framework.Broker.Core.ConfigurationModel;
 using Servinte.Framework.Clinic.BasicInformation.Infraestructure;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Servinte.Framework.Clinic.BasicInformation.API.Controllers
 {
@@ -21,79 +22,48 @@ namespace Servinte.Framework.Clinic.BasicInformation.API.Controllers
             
         }
 
-        // GET: BasicInformation
+        /// <summary>
+        /// Descripcion relevante del uso del recurso
+        /// </summary>
+        /// <returns>Entidad o Informacion a Retornar</returns>
+        /// <response code="200">Entidad o Informacion que acompaña, el codigo HTTP</response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<Patient>), 200)]
         public IActionResult Get()
         {
             var patient= this.context.Patients.FirstOrDefault();
-
-            //ConfigurationPublisherClient publisher = new ConfigurationPublisherClient
-            //{   
-            //    Applicacion= "External Consulting",
-            //    Module= "Basic_information",
-            //    Action="Add"
-
-                
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
-            //publisher = new ConfigurationPublisherClient
-            //{
-            //    Applicacion = "External Consulting",
-            //    Module = "Basic_information",
-            //    Action = "Update"
-
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
-            //publisher = new ConfigurationPublisherClient
-            //{
-            //    Applicacion = "External Consulting",
-            //    Module = "Basic_information",
-            //    Action = "Delete"
-                
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
-            //publisher = new ConfigurationPublisherClient
-            //{
-            //    Applicacion = "External Consulting",
-            //    Module = "Diagnostic",
-            //    Action = "Add"
-
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
-            //publisher = new ConfigurationPublisherClient
-            //{
-            //    Applicacion = "External Consulting",
-            //    Module = "Diagnostic",
-            //    Action = "Update"
-
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
-            //publisher = new ConfigurationPublisherClient
-            //{
-            //    Applicacion = "External Consulting",
-            //    Module = "Basic_information",
-            //    Action = "Delete"
-
-            //};
-            //this.rabbitMQBrokerClient.SendMessage<Patient>(patient, publisher);
-
+            
             return Ok(patient);
         }
 
+        /// <summary>
+        /// Descripcion Relevante del uso del recurso
+        /// </summary>
+        /// <param name="id">Descripcion de parametro1  a N</param>
+        /// <returns>Entidad o Informacion a Retornar</returns>
+        /// <response code="200">Descripcion Respuesta</response>
+        /// <response code="404">Recurso encontrado para el ID</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Patient),200)]
+        [ProducesResponseType(typeof(List<Patient>),404)]
         public async Task<IActionResult> GetById(int id)
         {
             var patient = await this.context.Patients.FirstOrDefaultAsync(c=>c.Id==id);
 
+            if (patient == null)
+                return NotFound(new { message = "Recurso no encotrado" });
+
             return Ok(patient);
         }
 
+        /// <summary>
+        /// Descripcion relevante del uso del recurso
+        /// </summary>
+        /// <param name="patient"></param>
+        /// <returns>Entidad o Informacion a Retornar</returns>
+        /// <response code="201">Patient creado para el request</response>
         [HttpPost]
+        [ProducesResponseType(typeof(Patient),201)]
         public async Task<IActionResult> Post([FromBody] Patient patient)
         {
             this.context.Patients.Add(patient);
@@ -109,7 +79,55 @@ namespace Servinte.Framework.Clinic.BasicInformation.API.Controllers
             };
             this.rabbitMQBrokerClient.SendMessage<Patient,object>(patient,null ,publisher);
 
-            return Ok(patient);
+            return CreatedAtRoute(new { id = patient.Id }, patient);
+        }
+
+        /// <summary>
+        /// Descripcion relevante del uso del recurso
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="patient"></param>
+        /// <returns>Entidad o Informacion a Retornar</returns>
+        /// <response code="204">No Content</response>
+        /// <response code="400">Request no coincidente</response>
+        /// <response code="404">Recurso encontrado para el ID</response>
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult Put(int id, [FromBody]Patient patient)
+        {
+            if (id != patient.Id)
+                return BadRequest(new { message = "Id no coincide con el recurso solicitado para actualizar" });
+
+            var existingProduct = this.context.Patients.SingleOrDefault(p => p.Id == patient.Id);
+
+            if (existingProduct==null)
+                return NotFound(new { message = "Recurso no encotrado" });
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Descripcion relevante del uso del recurso
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Entidad o Informacion a Retornar</returns>
+        /// <response code="204">No Content</response>        
+        /// <response code="404">Recurso encontrado para el ID</response>
+        [HttpDelete]        
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult Delete(int id)
+        {
+            var patient = this.context.Patients.SingleOrDefault(p => p.Id == id);
+
+            if (patient != null)
+                this.context.Patients.Remove(patient);
+            else
+                return NotFound(new { message = "Recurso no encotrado" });
+
+            return NoContent();
         }
 
     }
